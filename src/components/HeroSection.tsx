@@ -42,7 +42,7 @@ export function HeroSection() {
           <div className='flex flex-col sm:flex-row gap-6 justify-center'>
             <Button
               size='lg'
-              className='text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl bg-primary hover:bg-primary/90 transition-colors duration-200'
+              className='text-lg px-10 py-4 font-semibold shadow-lg hover:shadow-xl bg-primary hover:bg-primary/90 transition-colors duration-200'
             >
               Get Started Today
               <ArrowRight className='ml-2 h-5 w-5' />
@@ -50,7 +50,7 @@ export function HeroSection() {
             <Button
               variant='outline'
               size='lg'
-              className='text-lg px-10 py-4 rounded-full font-semibold border-2 hover:bg-muted/50 transition-all duration-300'
+              className='text-lg px-10 py-4 font-semibold border-2 hover:bg-muted/50 transition-all duration-300'
             >
               View Our Work
             </Button>

@@ -32,7 +32,7 @@ const NavBar = () => {
             >
               Home
             </Link>
-            <Link
+            {/* <Link
               href='/about'
               className='text-foreground hover:text-foreground/80 transition-colors'
             >
@@ -49,7 +49,7 @@ const NavBar = () => {
               className='text-foreground hover:text-foreground/80 transition-colors'
             >
               Contact
-            </Link>
+            </Link> */}
             {isSignedIn && (
               <Link
                 href='/dashboard'
@@ -60,18 +60,16 @@ const NavBar = () => {
             )}
             <ThemeSwitcher />
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton afterSignOutUrl='/' />
             ) : (
               <div className='flex items-center space-x-2'>
-                <SignInButton mode="modal">
-                  <Button variant="ghost" size="sm">
+                <SignInButton mode='modal'>
+                  <Button variant='ghost' size='sm'>
                     Sign In
                   </Button>
                 </SignInButton>
-                <SignUpButton mode="modal">
-                  <Button size="sm">
-                    Sign Up
-                  </Button>
+                <SignUpButton mode='modal'>
+                  <Button size='sm'>Sign Up</Button>
                 </SignUpButton>
               </div>
             )}
@@ -81,11 +79,11 @@ const NavBar = () => {
           <div className='md:hidden flex items-center space-x-2'>
             <ThemeSwitcher />
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton afterSignOutUrl='/' />
             ) : (
               <div className='flex items-center space-x-1'>
-                <SignInButton mode="modal">
-                  <Button variant="ghost" size="sm">
+                <SignInButton mode='modal'>
+                  <Button variant='ghost' size='sm'>
                     Sign In
                   </Button>
                 </SignInButton>
@@ -110,47 +108,57 @@ const NavBar = () => {
         {/* Mobile menu */}
         {isOpen && (
           <div className='md:hidden border-t'>
-            <div className='flex flex-col space-y-4 py-4'>
-              <Link
-                href='/'
-                className='text-foreground hover:text-foreground/80 transition-colors'
-                onClick={() => setIsOpen(false)}
+            <div className='flex flex-col space-y-2 py-4'>
+              <Button
+                variant='outline'
+                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                asChild
               >
-                Home
-              </Link>
-              <Link
-                href='/about'
-                className='text-foreground hover:text-foreground/80 transition-colors'
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                href='/services'
-                className='text-foreground hover:text-foreground/80 transition-colors'
-                onClick={() => setIsOpen(false)}
-              >
-                Services
-              </Link>
-              <Link
-                href='/contact'
-                className='text-foreground hover:text-foreground/80 transition-colors'
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </Link>
-              {isSignedIn && (
-                <Link
-                  href='/dashboard'
-                  className='text-foreground hover:text-foreground/80 transition-colors'
-                  onClick={() => setIsOpen(false)}
-                >
-                  Dashboard
+                <Link href='/' onClick={() => setIsOpen(false)}>
+                  Home
                 </Link>
+              </Button>
+              {/* <Button
+                variant='ghost'
+                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                asChild
+              >
+                <Link href='/about' onClick={() => setIsOpen(false)}>
+                  About
+                </Link>
+              </Button>
+              <Button
+                variant='ghost'
+                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                asChild
+              >
+                <Link href='/services' onClick={() => setIsOpen(false)}>
+                  Services
+                </Link>
+              </Button>
+              <Button
+                variant='ghost'
+                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                asChild
+              >
+                <Link href='/contact' onClick={() => setIsOpen(false)}>
+                  Contact
+                </Link>
+              </Button> */}
+              {isSignedIn && (
+                <Button
+                  variant='outline'
+                  className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                  asChild
+                >
+                  <Link href='/dashboard' onClick={() => setIsOpen(false)}>
+                    Dashboard
+                  </Link>
+                </Button>
               )}
               {!isSignedIn && (
-                <SignUpButton mode="modal">
-                  <Button size="sm" className='w-fit'>
+                <SignUpButton mode='modal'>
+                  <Button size='sm' className='w-fit mx-4'>
                     Sign Up
                   </Button>
                 </SignUpButton>

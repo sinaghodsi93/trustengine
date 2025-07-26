@@ -164,7 +164,7 @@ export default function Home() {
                 <Button
                   size='lg'
                   variant='secondary'
-                  className='text-lg px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300'
+                  className='text-lg px-8 py-4 font-semibold shadow-lg hover:shadow-xl transition-all duration-300'
                 >
                   Start Your Project
                   <ArrowRight className='ml-2 h-5 w-5' />
