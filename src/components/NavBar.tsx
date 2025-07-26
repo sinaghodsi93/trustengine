@@ -111,7 +111,7 @@ const NavBar = () => {
             <div className='flex flex-col space-y-2 py-4'>
               <Button
                 variant='outline'
-                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                className='h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
                 asChild
               >
                 <Link href='/' onClick={() => setIsOpen(false)}>
@@ -148,7 +148,7 @@ const NavBar = () => {
               {isSignedIn && (
                 <Button
                   variant='outline'
-                  className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                  className='h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
                   asChild
                 >
                   <Link href='/dashboard' onClick={() => setIsOpen(false)}>
