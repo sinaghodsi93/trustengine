@@ -158,7 +158,7 @@ const NavBar = () => {
               )}
               {!isSignedIn && (
                 <SignUpButton mode='modal'>
-                  <Button size='sm' className='w-fit mx-4'>
+                  <Button size='sm' className='w-full h-10 '>
                     Sign Up
                   </Button>
                 </SignUpButton>
