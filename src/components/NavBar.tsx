@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import Logo from "./svg/logo";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isSignedIn, user } = useUser();
 
   return (
     <nav className='border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
@@ -48,12 +50,47 @@ const NavBar = () => {
             >
               Contact
             </Link>
+            {isSignedIn && (
+              <Link
+                href='/dashboard'
+                className='text-foreground hover:text-foreground/80 transition-colors'
+              >
+                Dashboard
+              </Link>
+            )}
             <ThemeSwitcher />
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <div className='flex items-center space-x-2'>
+                <SignInButton mode="modal">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button size="sm">
+                    Sign Up
+                  </Button>
+                </SignUpButton>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button and theme switcher */}
           <div className='md:hidden flex items-center space-x-2'>
             <ThemeSwitcher />
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <div className='flex items-center space-x-1'>
+                <SignInButton mode="modal">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </SignInButton>
+              </div>
+            )}
             <Button
               variant='ghost'
               size='icon'
@@ -102,6 +139,22 @@ const NavBar = () => {
               >
                 Contact
               </Link>
+              {isSignedIn && (
+                <Link
+                  href='/dashboard'
+                  className='text-foreground hover:text-foreground/80 transition-colors'
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              )}
+              {!isSignedIn && (
+                <SignUpButton mode="modal">
+                  <Button size="sm" className='w-fit'>
+                    Sign Up
+                  </Button>
+                </SignUpButton>
+              )}
             </div>
           </div>
         )}
