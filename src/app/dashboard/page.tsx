@@ -14,7 +14,7 @@ export default async function DashboardPage() {
           Welcome back, {user?.firstName || 'User'}!
         </h1>
         <p className="text-muted-foreground">
-          Here's what's happening with your account today.
+          Here&apos;s what&apos;s happening with your account today.
         </p>
       </div>
 
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <div className="flex-1 space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  Project "Website Redesign" updated
+                  Project &quot;Website Redesign&quot; updated
                 </p>
                 <p className="text-sm text-muted-foreground">
                   2 hours ago
