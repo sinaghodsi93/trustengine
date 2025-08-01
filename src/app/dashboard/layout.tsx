@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Desktop Layout with Sidebar */}
       <div className='hidden md:flex w-full'>
         <SidebarProvider>
-          <Sidebar>
+          <Sidebar variant='floating' data-variant='inset' className='bg-background'>
             <SidebarHeader className='border-b border-border p-6'>
               <div className='flex items-center gap-3'>
                 <a href='/' className='flex items-center gap-3'>
@@ -136,7 +136,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </SidebarFooter>
           </Sidebar>
 
-          <SidebarInset className='flex flex-col'>
+          <SidebarInset className='flex flex-col bg-background'>
             <header className='flex h-16 shrink-0 items-center gap-2 border-b px-4'>
               <SidebarTrigger className='-ml-1' />
               <div className='ml-auto'>
