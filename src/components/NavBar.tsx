@@ -17,12 +17,17 @@ const NavBar = () => {
     <nav className='border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
       <MaxWidthWrapper>
         <div className='flex justify-between items-center h-16'>
-          <Link href='/' className='font-bold text-xl'>
-            <div className='flex items-center gap-0.5'>
-              <Logo className='h-6 w-6 text-black dark:text-white' />
-              Logo
+          <div className='flex items-center space-x-4'>
+            <Link href='/' className='font-bold text-xl'>
+              <div className='flex items-center gap-0.5'>
+                <Logo className='h-6 w-6 text-black dark:text-white' />
+                Logo
+              </div>
+            </Link>
+            <div className='hidden md:block'>
+              <ThemeSwitcher />
             </div>
-          </Link>
+          </div>
 
           {/* Desktop menu */}
           <div className='hidden md:flex items-center space-x-6'>
@@ -58,7 +63,7 @@ const NavBar = () => {
                 Dashboard
               </Link>
             )}
-            <ThemeSwitcher />
+
             {isSignedIn ? (
               <UserButton afterSignOutUrl='/' />
             ) : (
