@@ -21,10 +21,10 @@ export function HeroSection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <h1 className='text-5xl md:text-7xl font-bold mb-8 leading-tight'>
-              Build Amazing
+              Find Reviews You Can
               <br />
               <span className='bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent'>
-                Digital Experiences
+                Actually Trust
               </span>
             </h1>
           </motion.div>
@@ -35,8 +35,8 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            We create modern, scalable solutions that help your business thrive
-            and succeed in the ever-evolving digital landscape.
+            Discover honest reviews from real customers. No fake reviews, no paid promotions - 
+            just authentic feedback to help you make better purchasing decisions.
           </motion.p>
 
           <div className='flex flex-col sm:flex-row gap-6 justify-center'>
@@ -44,7 +44,7 @@ export function HeroSection() {
               size='lg'
               className='cursor-pointer text-lg px-10 py-4 font-semibold shadow-lg hover:shadow-xl bg-primary hover:bg-primary/90 transition-colors duration-200'
             >
-              Get Started Today
+              Explore Reviews
               <ArrowRight className='ml-2 h-5 w-5' />
             </Button>
             <Button
@@ -52,7 +52,7 @@ export function HeroSection() {
               size='lg'
               className='cursor-pointer text-lg px-10 py-4 font-semibold border-2 hover:bg-muted/50 transition-all duration-300'
             >
-              View Our Work
+              For Businesses
             </Button>
           </div>
         </div>

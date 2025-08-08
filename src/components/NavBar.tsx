@@ -35,26 +35,14 @@ const NavBar = () => {
               href='/'
               className='text-foreground hover:text-foreground/80 transition-colors'
             >
-              Home
-            </Link>
-            {/* <Link
-              href='/about'
-              className='text-foreground hover:text-foreground/80 transition-colors'
-            >
-              About
+              Find Reviews
             </Link>
             <Link
-              href='/services'
-              className='text-foreground hover:text-foreground/80 transition-colors'
+              href='/business'
+              className='text-foreground hover:text-foreground/80 transition-colors font-medium'
             >
-              Services
+              For Business
             </Link>
-            <Link
-              href='/contact'
-              className='text-foreground hover:text-foreground/80 transition-colors'
-            >
-              Contact
-            </Link> */}
             {isSignedIn && (
               <Link
                 href='/dashboard'
@@ -120,36 +108,18 @@ const NavBar = () => {
                 asChild
               >
                 <Link href='/' onClick={() => setIsOpen(false)}>
-                  Home
-                </Link>
-              </Button>
-              {/* <Button
-                variant='ghost'
-                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
-                asChild
-              >
-                <Link href='/about' onClick={() => setIsOpen(false)}>
-                  About
+                  Find Reviews
                 </Link>
               </Button>
               <Button
                 variant='ghost'
-                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
+                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors font-medium'
                 asChild
               >
-                <Link href='/services' onClick={() => setIsOpen(false)}>
-                  Services
+                <Link href='/business' onClick={() => setIsOpen(false)}>
+                  For Business
                 </Link>
               </Button>
-              <Button
-                variant='ghost'
-                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
-                asChild
-              >
-                <Link href='/contact' onClick={() => setIsOpen(false)}>
-                  Contact
-                </Link>
-              </Button> */}
               {isSignedIn && (
                 <Button
                   variant='outline'
