@@ -1,0 +1,329 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model for both consumers and business owners
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique // Clerk user ID for authentication
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // User role - can be both consumer and business owner
+  isBusinessOwner Boolean @default(false)
+
+  // Consumer-specific fields
+  consumerReviews Review[]  @relation("ConsumerReviews")
+  helpfulVotes    Vote[]    @relation("UserVotes")
+  reportedReviews Report[]  @relation("UserReports")
+
+  // Business owner relationships
+  ownedBusinesses Business[] @relation("BusinessOwner")
+  subscriptions   Subscription[]
+
+  @@map("users")
+}
+
+// Subscription plans for business owners
+enum SubscriptionTier {
+  FREE
+  GROWTH
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  TRIALING
+}
+
+model Subscription {
+  id                String             @id @default(cuid())
+  userId            String
+  tier              SubscriptionTier   @default(FREE)
+  status            SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd Boolean            @default(false)
+  stripeCustomerId  String?            @unique
+  stripeSubscriptionId String?         @unique
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+// Business/Company model
+model Business {
+  id          String   @id @default(cuid())
+  ownerId     String
+  name        String
+  description String?
+  website     String?
+  logo        String?
+  industry    String?
+  size        BusinessSize?
+  location    String?
+  
+  // Trust metrics
+  trustScore  Float    @default(0.0) // 0-5 star rating
+  totalReviews Int     @default(0)
+  averageRating Float  @default(0.0)
+  
+  // SEO and verification
+  isVerified  Boolean  @default(false)
+  slug        String   @unique // URL-friendly identifier
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  owner       User       @relation("BusinessOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  reviews     Review[]   @relation("BusinessReviews")
+  categories  BusinessCategory[]
+  invitations ReviewInvitation[]
+  analytics   BusinessAnalytics[]
+
+  @@map("businesses")
+}
+
+enum BusinessSize {
+  STARTUP     // 1-10 employees
+  SMALL       // 11-50 employees  
+  MEDIUM      // 51-200 employees
+  LARGE       // 201+ employees
+}
+
+// Categories for businesses (like SaaS, E-commerce, etc.)
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  businesses BusinessCategory[]
+
+  @@map("categories")
+}
+
+model BusinessCategory {
+  businessId String
+  categoryId String
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([businessId, categoryId])
+  @@map("business_categories")
+}
+
+// Review model - core of the platform
+model Review {
+  id          String      @id @default(cuid())
+  businessId  String
+  reviewerId  String
+  
+  // Review content
+  title       String?
+  content     String
+  rating      Int         @db.SmallInt // 1-5 stars
+  
+  // Review metadata
+  isVerified  Boolean     @default(false) // Verified purchase/interaction
+  source      ReviewSource @default(PLATFORM) // How the review was submitted
+  
+  // Moderation
+  status      ReviewStatus @default(PUBLISHED)
+  moderationNotes String?
+  
+  // Engagement metrics
+  helpfulCount    Int      @default(0)
+  notHelpfulCount Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  business    Business @relation("BusinessReviews", fields: [businessId], references: [id], onDelete: Cascade)
+  reviewer    User     @relation("ConsumerReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
+  
+  votes       Vote[]   @relation("ReviewVotes")
+  reports     Report[] @relation("ReviewReports")
+  responses   ReviewResponse[]
+  tags        ReviewTag[]
+
+  @@map("reviews")
+}
+
+enum ReviewSource {
+  PLATFORM    // Direct on platform
+  INVITATION  // Via email invitation
+  WIDGET      // Via embedded widget
+  API         // Via API integration
+}
+
+enum ReviewStatus {
+  PUBLISHED
+  PENDING     // Awaiting moderation
+  REJECTED    // Rejected by moderation
+  HIDDEN      // Hidden by business/admin
+}
+
+// Business responses to reviews
+model ReviewResponse {
+  id        String   @id @default(cuid())
+  reviewId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("review_responses")
+}
+
+// Review voting system (helpful/not helpful)
+model Vote {
+  id       String   @id @default(cuid())
+  reviewId String
+  userId   String
+  type     VoteType
+  createdAt DateTime @default(now())
+
+  review Review @relation("ReviewVotes", fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserVotes", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId]) // One vote per user per review
+  @@map("votes")
+}
+
+enum VoteType {
+  HELPFUL
+  NOT_HELPFUL
+}
+
+// Review reporting system
+model Report {
+  id        String     @id @default(cuid())
+  reviewId  String
+  reporterId String
+  reason    ReportReason
+  details   String?
+  status    ReportStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+  resolvedAt DateTime?
+
+  review   Review @relation("ReviewReports", fields: [reviewId], references: [id], onDelete: Cascade)
+  reporter User   @relation("UserReports", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+enum ReportReason {
+  SPAM
+  FAKE
+  OFFENSIVE
+  INAPPROPRIATE
+  COPYRIGHT
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+// Tags for categorizing reviews
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?  // Hex color for UI display
+  createdAt DateTime @default(now())
+
+  reviews ReviewTag[]
+
+  @@map("tags")
+}
+
+model ReviewTag {
+  reviewId String
+  tagId    String
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([reviewId, tagId])
+  @@map("review_tags")
+}
+
+// Review invitation system for businesses
+model ReviewInvitation {
+  id          String            @id @default(cuid())
+  businessId  String
+  email       String
+  customerName String?
+  orderReference String?        // Order ID or reference
+  token       String            @unique // Unique token for invitation link
+  status      InvitationStatus  @default(SENT)
+  sentAt      DateTime          @default(now())
+  respondedAt DateTime?
+  expiresAt   DateTime
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("review_invitations")
+}
+
+enum InvitationStatus {
+  SENT
+  OPENED
+  RESPONDED
+  EXPIRED
+}
+
+// Analytics tracking for businesses
+model BusinessAnalytics {
+  id              String   @id @default(cuid())
+  businessId      String
+  date            DateTime @db.Date
+  
+  // Review metrics
+  newReviews      Int      @default(0)
+  averageRating   Float    @default(0.0)
+  totalReviews    Int      @default(0)
+  
+  // Engagement metrics
+  profileViews    Int      @default(0)
+  reviewViews     Int      @default(0)
+  
+  // Invitation metrics
+  invitationsSent Int      @default(0)
+  invitationsOpened Int    @default(0)
+  invitationsResponded Int @default(0)
+  
+  createdAt       DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, date])
+  @@map("business_analytics")
+}

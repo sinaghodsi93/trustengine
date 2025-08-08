@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/sidebar";
 import { BottomNavigation } from "@/components/ui/bottom-navigation";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Home, User, Settings, BarChart3, FileText, Users } from "lucide-react";
+import { DashboardModeSwitcher, useDashboardMode } from "@/components/dashboard-mode-switcher";
+import { Home, User, Settings, BarChart3, Building, MessageSquare, Star, Send } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/svg/logo";
 
@@ -23,26 +24,22 @@ interface DashboardLayoutProps {
   children: ReactNode;
 }
 
-const sidebarItems = [
+// User mode navigation items
+const userSidebarItems = [
   {
     label: "Dashboard",
     href: "/dashboard",
     icon: Home,
   },
   {
-    label: "Projects",
-    href: "/dashboard/projects",
-    icon: FileText,
+    label: "My Reviews",
+    href: "/dashboard/reviews",
+    icon: Star,
   },
   {
-    label: "Users",
-    href: "/dashboard/users",
-    icon: Users,
-  },
-  {
-    label: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart3,
+    label: "Favorite Businesses",
+    href: "/dashboard/favorites",
+    icon: MessageSquare,
   },
   {
     label: "Profile",
@@ -56,16 +53,73 @@ const sidebarItems = [
   },
 ];
 
-const bottomNavItems = [
+// Business mode navigation items
+const businessSidebarItems = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: Home,
+  },
+  {
+    label: "My Businesses",
+    href: "/dashboard/businesses",
+    icon: Building,
+  },
+  {
+    label: "Reviews",
+    href: "/dashboard/reviews",
+    icon: MessageSquare,
+  },
+  {
+    label: "Invitations",
+    href: "/dashboard/invitations",
+    icon: Send,
+  },
+  {
+    label: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
+];
+
+const userBottomNavItems = [
   {
     label: "Home",
     href: "/dashboard",
     icon: Home,
   },
   {
-    label: "Projects",
-    href: "/dashboard/projects",
-    icon: FileText,
+    label: "Reviews",
+    href: "/dashboard/reviews",
+    icon: Star,
+  },
+  {
+    label: "Profile",
+    href: "/dashboard/profile",
+    icon: User,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
+];
+
+const businessBottomNavItems = [
+  {
+    label: "Home",
+    href: "/dashboard",
+    icon: Home,
+  },
+  {
+    label: "Business",
+    href: "/dashboard/businesses",
+    icon: Building,
   },
   {
     label: "Analytics",
@@ -80,6 +134,11 @@ const bottomNavItems = [
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const { mode, changeMode } = useDashboardMode();
+  
+  const sidebarItems = mode === 'business' ? businessSidebarItems : userSidebarItems;
+  const bottomNavItems = mode === 'business' ? businessBottomNavItems : userBottomNavItems;
+
   return (
     <div className='min-h-screen bg-background'>
       {/* Desktop Layout with Sidebar */}
@@ -88,7 +147,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <Sidebar variant='floating' data-variant='inset' className='bg-background'>
             <SidebarHeader className='border-b border-border p-6'>
               <div className='flex items-center gap-3'>
-                <a href='/' className='flex items-center gap-3'>
+                <Link href='/' className='flex items-center gap-3'>
                   <div className='flex aspect-square size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-sm'>
                     <Logo className='size-6' />
                   </div>
@@ -98,17 +157,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       Professional
                     </span>
                   </div>
-                </a>
+                </Link>
               </div>
             </SidebarHeader>
-            <SidebarContent className='p-4'>
-              <div className='space-y-1'>
-                <div className='px-2 py-1'>
-                  <h3 className='text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2'>
-                    Navigation
-                  </h3>
-                </div>
-                <SidebarMenu className='space-y-1'>
+            <SidebarContent className='p-3'>
+              <div className='space-y-3'>
+                <DashboardModeSwitcher mode={mode} onModeChangeAction={changeMode} />
+                <div className='space-y-1'>
+                  <div className='px-2 py-1'>
+                    <h3 className='text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1'>
+                      {mode === 'business' ? 'Business' : 'User'}
+                    </h3>
+                  </div>
+                  <SidebarMenu className='space-y-1'>
                   {sidebarItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
@@ -125,7 +186,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
-                </SidebarMenu>
+                  </SidebarMenu>
+                </div>
               </div>
             </SidebarContent>
             <SidebarFooter className='p-4 border-t border-border'>
@@ -152,14 +214,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Mobile Layout without Sidebar */}
       <div className='md:hidden flex flex-col min-h-screen'>
         <header className='flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-background'>
-          <a href='/' className='flex items-center gap-3'>
+          <Link href='/' className='flex items-center gap-3'>
             <div className='flex items-center gap-3'>
               <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 text-primary-foreground'>
                 <Logo className='size-5' />
               </div>
               <span className='font-bold'>logo</span>
             </div>
-          </a>
+          </Link>
           <div className='ml-auto'>
             <ThemeSwitcher />
           </div>
