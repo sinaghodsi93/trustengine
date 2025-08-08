@@ -2,6 +2,7 @@
 
 import { useState, useEffect, createContext, useContext } from 'react'
 import { useUser } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
@@ -32,6 +33,10 @@ export function DashboardModeProvider({ children }: { children: React.ReactNode 
   const changeMode = (newMode: DashboardMode) => {
     setMode(newMode)
     localStorage.setItem('dashboard-mode', newMode)
+    // Navigate to main dashboard page when mode changes
+    if (typeof window !== 'undefined') {
+      window.location.href = '/dashboard'
+    }
   }
 
   return (
@@ -41,6 +46,7 @@ export function DashboardModeProvider({ children }: { children: React.ReactNode 
   )
 }
 
+// Desktop version (default)
 export function DashboardModeSwitcher() {
   const { mode, changeMode } = useDashboardMode()
   const { user } = useUser()
@@ -103,6 +109,40 @@ export function DashboardModeSwitcher() {
         </div>
       )}
     </div>
+  )
+}
+
+// Minimal mobile version
+export function DashboardModeSwitcherMobile() {
+  const { mode, changeMode } = useDashboardMode()
+  const [isBusinessOwner, setIsBusinessOwner] = useState(false)
+  
+  useEffect(() => {
+    // Allow toggle for development - replace with actual business owner check
+    setIsBusinessOwner(true) // TODO: Replace with actual business owner check
+  }, [])
+
+  const toggleMode = () => {
+    const newMode = mode === 'user' ? 'business' : 'user'
+    changeMode(newMode)
+  }
+
+  return (
+    <button
+      onClick={toggleMode}
+      disabled={!isBusinessOwner}
+      className="flex items-center gap-1 px-2 py-1 rounded-md bg-muted/30 border transition-colors hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed"
+      title={`Switch to ${mode === 'user' ? 'business' : 'user'} mode`}
+    >
+      {mode === 'business' ? (
+        <Building className="h-4 w-4 text-primary" />
+      ) : (
+        <User className="h-4 w-4 text-muted-foreground" />
+      )}
+      <span className="text-xs font-medium">
+        {mode === 'business' ? 'Business' : 'User'}
+      </span>
+    </button>
   )
 }
 

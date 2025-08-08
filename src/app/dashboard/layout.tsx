@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BottomNavigation } from "@/components/ui/bottom-navigation";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { DashboardModeSwitcher, DashboardModeProvider, useDashboardMode } from "@/components/dashboard-mode-switcher";
+import { DashboardModeSwitcher, DashboardModeSwitcherMobile, DashboardModeProvider, useDashboardMode } from "@/components/dashboard-mode-switcher";
 import { Home, User, Settings, BarChart3, Building, MessageSquare, Star, Send } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/svg/logo";
@@ -230,7 +230,8 @@ function DashboardLayoutInner({ children }: DashboardLayoutProps) {
               <span className='font-bold'>logo</span>
             </div>
           </Link>
-          <div className='ml-auto'>
+          <div className='ml-auto flex items-center gap-2'>
+            <DashboardModeSwitcherMobile />
             <ThemeSwitcher />
           </div>
         </header>
