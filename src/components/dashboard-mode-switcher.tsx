@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext, useContext } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -9,28 +9,54 @@ import { Building, User, Crown } from 'lucide-react'
 
 export type DashboardMode = 'user' | 'business'
 
-interface DashboardModeSwitcherProps {
+// Create context for dashboard mode
+interface DashboardModeContextType {
   mode: DashboardMode
-  onModeChangeAction: (mode: DashboardMode) => void
+  changeMode: (mode: DashboardMode) => void
 }
 
-export function DashboardModeSwitcher({ mode, onModeChangeAction }: DashboardModeSwitcherProps) {
+const DashboardModeContext = createContext<DashboardModeContextType | undefined>(undefined)
+
+// Provider component
+export function DashboardModeProvider({ children }: { children: React.ReactNode }) {
+  const [mode, setMode] = useState<DashboardMode>('user')
+
+  useEffect(() => {
+    // Load saved mode from localStorage
+    const savedMode = localStorage.getItem('dashboard-mode') as DashboardMode
+    if (savedMode && (savedMode === 'user' || savedMode === 'business')) {
+      setMode(savedMode)
+    }
+  }, [])
+
+  const changeMode = (newMode: DashboardMode) => {
+    setMode(newMode)
+    localStorage.setItem('dashboard-mode', newMode)
+  }
+
+  return (
+    <DashboardModeContext.Provider value={{ mode, changeMode }}>
+      {children}
+    </DashboardModeContext.Provider>
+  )
+}
+
+export function DashboardModeSwitcher() {
+  const { mode, changeMode } = useDashboardMode()
   const { user } = useUser()
   const [isBusinessOwner, setIsBusinessOwner] = useState(false)
   
   useEffect(() => {
     // Check if user is a business owner from metadata or database
-    // For now, we'll check if they have business owner metadata
-    const businessOwner = user?.publicMetadata?.isBusinessOwner as boolean
-    setIsBusinessOwner(businessOwner || false)
+    // For development, allow toggle. In production, check actual metadata/database
+    // const businessOwner = user?.publicMetadata?.isBusinessOwner as boolean
+    // Allow toggle for development - remove this line for production
+    setIsBusinessOwner(true) // TODO: Replace with actual business owner check
   }, [user])
 
   const toggleMode = () => {
     const newMode = mode === 'user' ? 'business' : 'user'
-    onModeChangeAction(newMode)
-    
-    // Store preference in localStorage
-    localStorage.setItem('dashboard-mode', newMode)
+    changeMode(newMode)
   }
 
   return (
@@ -80,22 +106,11 @@ export function DashboardModeSwitcher({ mode, onModeChangeAction }: DashboardMod
   )
 }
 
-// Hook to manage dashboard mode state
+// Hook to use dashboard mode context
 export function useDashboardMode() {
-  const [mode, setMode] = useState<DashboardMode>('user')
-
-  useEffect(() => {
-    // Load saved mode from localStorage
-    const savedMode = localStorage.getItem('dashboard-mode') as DashboardMode
-    if (savedMode && (savedMode === 'user' || savedMode === 'business')) {
-      setMode(savedMode)
-    }
-  }, [])
-
-  const changeMode = (newMode: DashboardMode) => {
-    setMode(newMode)
-    localStorage.setItem('dashboard-mode', newMode)
+  const context = useContext(DashboardModeContext)
+  if (context === undefined) {
+    throw new Error('useDashboardMode must be used within a DashboardModeProvider')
   }
-
-  return { mode, changeMode }
+  return context
 }

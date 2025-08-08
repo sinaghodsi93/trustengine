@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BottomNavigation } from "@/components/ui/bottom-navigation";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { DashboardModeSwitcher, useDashboardMode } from "@/components/dashboard-mode-switcher";
+import { DashboardModeSwitcher, DashboardModeProvider, useDashboardMode } from "@/components/dashboard-mode-switcher";
 import { Home, User, Settings, BarChart3, Building, MessageSquare, Star, Send } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/svg/logo";
@@ -134,7 +134,15 @@ const businessBottomNavItems = [
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { mode, changeMode } = useDashboardMode();
+  return (
+    <DashboardModeProvider>
+      <DashboardLayoutInner>{children}</DashboardLayoutInner>
+    </DashboardModeProvider>
+  )
+}
+
+function DashboardLayoutInner({ children }: DashboardLayoutProps) {
+  const { mode } = useDashboardMode();
   
   const sidebarItems = mode === 'business' ? businessSidebarItems : userSidebarItems;
   const bottomNavItems = mode === 'business' ? businessBottomNavItems : userBottomNavItems;
@@ -162,7 +170,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </SidebarHeader>
             <SidebarContent className='p-3'>
               <div className='space-y-3'>
-                <DashboardModeSwitcher mode={mode} onModeChangeAction={changeMode} />
+                <DashboardModeSwitcher />
                 <div className='space-y-1'>
                   <div className='px-2 py-1'>
                     <h3 className='text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1'>
