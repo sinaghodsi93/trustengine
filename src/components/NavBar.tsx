@@ -112,8 +112,8 @@ const NavBar = () => {
                 </Link>
               </Button>
               <Button
-                variant='ghost'
-                className='justify-start h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors font-medium'
+                variant='outline'
+                className='h-auto py-3 px-4 text-foreground hover:text-foreground/80 transition-colors'
                 asChild
               >
                 <Link href='/business' onClick={() => setIsOpen(false)}>
