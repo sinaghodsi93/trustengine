@@ -47,7 +47,7 @@ export default function BusinessPage() {
               <div className='flex flex-col sm:flex-row gap-6 justify-center'>
                 <Button
                   size='lg'
-                  className='cursor-pointer text-lg px-10 py-4 font-semibold shadow-lg hover:shadow-xl bg-primary hover:bg-primary/90 transition-colors duration-200'
+                  className='cursor-pointer text-lg px-10 py-4 font-semibold shadow-lg bg-primary'
                 >
                   Start Free Trial
                   <ArrowRight className='ml-2 h-5 w-5' />
@@ -55,7 +55,7 @@ export default function BusinessPage() {
                 <Button
                   variant='outline'
                   size='lg'
-                  className='cursor-pointer text-lg px-10 py-4 font-semibold border-2 hover:bg-muted/50 transition-all duration-300'
+                  className='cursor-pointer text-lg px-10 py-4 font-semibold border-2'
                 >
                   See Demo
                 </Button>
@@ -133,7 +133,7 @@ export default function BusinessPage() {
 
             <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
               {/* Free Plan */}
-              <div className='relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-green-500/5 p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20 hover:border-green-500/30'>
+              <div className='relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-green-500/5 p-8'>
                 <div className='text-center mb-8'>
                   <div className='inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-full mb-4'>
                     <span className='text-2xl'>🚀</span>
@@ -161,7 +161,7 @@ export default function BusinessPage() {
                   </li>
                 </ul>
                 <Button
-                  className='w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0'
+                  className='w-full bg-gradient-to-r from-green-500 to-green-600 text-white border-0'
                   size='lg'
                 >
                   Start Free
@@ -169,7 +169,7 @@ export default function BusinessPage() {
               </div>
 
               {/* Growth Plan */}
-              <div className='relative overflow-visible rounded-2xl border-2 border-primary bg-gradient-to-br from-card via-card to-primary/5 p-8 pt-12 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20'>
+              <div className='relative overflow-visible rounded-2xl border-2 border-primary bg-gradient-to-br from-card via-card to-primary/5 p-8 pt-12'>
                 <div className='absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-primary to-primary text-primary-foreground px-8 py-2 rounded-full text-sm font-bold shadow-lg'>
                   ⭐ Most Popular
                 </div>
@@ -206,7 +206,7 @@ export default function BusinessPage() {
                   </li>
                 </ul>
                 <Button
-                  className='w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground border-0 shadow-lg'
+                  className='w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground border-0 shadow-lg'
                   size='lg'
                 >
                   Start Growth Plan
@@ -214,7 +214,7 @@ export default function BusinessPage() {
               </div>
 
               {/* Pro Plan */}
-              <div className='relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-purple-500/5 p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/30'>
+              <div className='relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-purple-500/5 p-8'>
                 <div className='text-center mb-8'>
                   <div className='inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-full mb-4'>
                     <span className='text-2xl'>👑</span>
@@ -248,7 +248,7 @@ export default function BusinessPage() {
                   </li>
                 </ul>
                 <Button
-                  className='w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-0'
+                  className='w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0'
                   size='lg'
                 >
                   Start Pro Plan
@@ -279,7 +279,7 @@ export default function BusinessPage() {
                 <Button
                   size='lg'
                   variant='secondary'
-                  className='cursor-pointer text-lg px-8 py-4 font-semibold shadow-lg hover:shadow-xl transition-all duration-300'
+                  className='cursor-pointer text-lg px-8 py-4 font-semibold shadow-lg'
                 >
                   Start Free Today
                   <ArrowRight className='ml-2 h-5 w-5' />
