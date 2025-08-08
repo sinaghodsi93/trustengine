@@ -16,7 +16,7 @@ import {
 import { BottomNavigation } from "@/components/ui/bottom-navigation";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { DashboardModeSwitcher, DashboardModeSwitcherMobile, DashboardModeProvider, useDashboardMode } from "@/components/dashboard-mode-switcher";
-import { Home, User, Settings, BarChart3, Building, MessageSquare, Star, Send } from "lucide-react";
+import { Home, BarChart3, Building, MessageSquare, Star, Send, Heart } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/svg/logo";
 
@@ -25,43 +25,33 @@ interface DashboardLayoutProps {
 }
 
 // User mode navigation items
-const userSidebarItems = [
+const userNavigationItems = [
   {
     label: "Dashboard",
     href: "/dashboard",
     icon: Home,
   },
   {
-    label: "My Reviews",
+    label: "Reviews",
     href: "/dashboard/reviews",
     icon: Star,
   },
   {
-    label: "Favorite Businesses",
+    label: "Favorites",
     href: "/dashboard/favorites",
-    icon: MessageSquare,
-  },
-  {
-    label: "Profile",
-    href: "/dashboard/profile",
-    icon: User,
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
+    icon: Heart,
   },
 ];
 
 // Business mode navigation items
-const businessSidebarItems = [
+const businessNavigationItems = [
   {
     label: "Dashboard",
     href: "/dashboard",
     icon: Home,
   },
   {
-    label: "My Businesses",
+    label: "Businesses",
     href: "/dashboard/businesses",
     icon: Building,
   },
@@ -80,57 +70,6 @@ const businessSidebarItems = [
     href: "/dashboard/analytics",
     icon: BarChart3,
   },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-];
-
-const userBottomNavItems = [
-  {
-    label: "Home",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    label: "Reviews",
-    href: "/dashboard/reviews",
-    icon: Star,
-  },
-  {
-    label: "Profile",
-    href: "/dashboard/profile",
-    icon: User,
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-];
-
-const businessBottomNavItems = [
-  {
-    label: "Home",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    label: "Business",
-    href: "/dashboard/businesses",
-    icon: Building,
-  },
-  {
-    label: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart3,
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -144,8 +83,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 function DashboardLayoutInner({ children }: DashboardLayoutProps) {
   const { mode } = useDashboardMode();
   
-  const sidebarItems = mode === 'business' ? businessSidebarItems : userSidebarItems;
-  const bottomNavItems = mode === 'business' ? businessBottomNavItems : userBottomNavItems;
+  const navigationItems = mode === 'business' ? businessNavigationItems : userNavigationItems;
+  
+  // Filter items for bottom navigation (mobile) - show only key items
+  const bottomNavItems = mode === 'business' 
+    ? navigationItems.filter(item => 
+        ['Dashboard', 'Businesses', 'Reviews', 'Analytics'].includes(item.label)
+      )
+    : navigationItems; // Show all items for user mode (only 3 items)
 
   return (
     <div className='min-h-screen bg-background'>
@@ -178,7 +123,7 @@ function DashboardLayoutInner({ children }: DashboardLayoutProps) {
                     </h3>
                   </div>
                   <SidebarMenu className='space-y-1'>
-                  {sidebarItems.map((item) => (
+                  {navigationItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
                         asChild

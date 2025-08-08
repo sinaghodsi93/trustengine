@@ -2,7 +2,6 @@
 
 import { useState, useEffect, createContext, useContext } from 'react'
 import { useUser } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
