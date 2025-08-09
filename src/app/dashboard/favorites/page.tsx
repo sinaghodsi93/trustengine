@@ -96,19 +96,19 @@ export default function FavoritesPage() {
               key={favorite.id}
               className='hover:shadow-md transition-shadow'
             >
-              <CardContent className='p-6'>
-                <div className='flex items-start justify-between'>
-                  <div className='flex items-start gap-4 flex-1'>
-                    <div className='w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center text-primary-foreground font-semibold text-xl'>
+              <CardContent className='p-4 sm:p-6'>
+                <div className='flex flex-col sm:flex-row items-start justify-between gap-4'>
+                  <div className='flex flex-col sm:flex-row items-start gap-4 flex-1 min-w-0'>
+                    <div className='w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center text-primary-foreground font-semibold text-lg sm:text-xl flex-shrink-0'>
                       {favorite.businessName.charAt(0)}
                     </div>
 
-                    <div className='flex-1'>
-                      <div className='flex items-center gap-3 mb-2'>
-                        <h3 className='text-xl font-semibold'>
+                    <div className='flex-1 min-w-0'>
+                      <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2'>
+                        <h3 className='text-lg sm:text-xl font-semibold truncate'>
                           {favorite.businessName}
                         </h3>
-                        <Badge variant='outline' className='text-xs'>
+                        <Badge variant='outline' className='text-xs w-fit'>
                           {favorite.category}
                         </Badge>
                       </div>
@@ -117,7 +117,7 @@ export default function FavoritesPage() {
                         {favorite.description}
                       </p>
 
-                      <div className='flex items-center gap-4 mb-4'>
+                      <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4'>
                         <div className='flex items-center gap-1'>
                           <Star className='h-4 w-4 text-yellow-500 fill-yellow-500' />
                           <span className='font-medium'>
@@ -163,29 +163,32 @@ export default function FavoritesPage() {
                         </div>
                       )}
 
-                      <div className='flex gap-2'>
-                        <Button variant='outline' size='sm' asChild>
+                      <div className='flex flex-wrap gap-2'>
+                        <Button variant='outline' size='sm' asChild className='min-w-0'>
                           <a
                             href={favorite.website}
                             target='_blank'
                             rel='noopener noreferrer'
                           >
                             <ExternalLink className='h-3 w-3 mr-1' />
-                            Visit Website
+                            <span className='hidden xs:inline'>Visit Website</span>
+                            <span className='xs:hidden'>Visit</span>
                           </a>
                         </Button>
 
                         {!favorite.myReview && (
-                          <Button size='sm'>
+                          <Button size='sm' className='min-w-0'>
                             <MessageSquare className='h-3 w-3 mr-1' />
-                            Write Review
+                            <span className='hidden xs:inline'>Write Review</span>
+                            <span className='xs:hidden'>Review</span>
                           </Button>
                         )}
 
                         {favorite.myReview && (
-                          <Button variant='outline' size='sm'>
+                          <Button variant='outline' size='sm' className='min-w-0'>
                             <MessageSquare className='h-3 w-3 mr-1' />
-                            Edit Review
+                            <span className='hidden xs:inline'>Edit Review</span>
+                            <span className='xs:hidden'>Edit</span>
                           </Button>
                         )}
                       </div>
@@ -196,7 +199,7 @@ export default function FavoritesPage() {
                     variant='ghost'
                     size='icon'
                     onClick={() => removeFavorite(favorite.id)}
-                    className='text-muted-foreground hover:text-destructive'
+                    className='text-muted-foreground hover:text-destructive flex-shrink-0 self-start sm:self-center'
                   >
                     <Trash2 className='h-4 w-4' />
                   </Button>
@@ -216,10 +219,19 @@ export default function FavoritesPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='flex gap-3'>
-            <Button variant='outline'>Discover New Businesses</Button>
-            <Button variant='outline'>Export Favorites</Button>
-            <Button variant='outline'>My Review History</Button>
+          <div className='flex flex-wrap gap-3'>
+            <Button variant='outline' className='min-w-0'>
+              <span className='hidden sm:inline'>Discover New Businesses</span>
+              <span className='sm:hidden'>Discover</span>
+            </Button>
+            <Button variant='outline' className='min-w-0'>
+              <span className='hidden sm:inline'>Export Favorites</span>
+              <span className='sm:hidden'>Export</span>
+            </Button>
+            <Button variant='outline' className='min-w-0'>
+              <span className='hidden sm:inline'>My Review History</span>
+              <span className='sm:hidden'>Reviews</span>
+            </Button>
           </div>
         </CardContent>
       </Card>
